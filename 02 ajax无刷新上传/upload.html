@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script>
+    window.onload = function () {
+      var oMyFile = document.getElementById('myFile');
+      var oBtn = document.getElementById('btn');
+      oBtn.onclick = function () {
+        // console.log(oMyFile.files)
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          alert(this.responseText);
+          alert('上传成功');
+        }
+        // 进度条
+        xhr.upload.onprogress = function (e) { //文件上传时每隔100ms左右执行一次
+          var loaded = e.loaded; //要发送的总量
+          var roral = e.total; //已发送的总量
+          var per = Math.floor((loaded / total) * 100) + "%";
+          document.getElementById('son').style.width = per;
+        }
+        xhr.open('post', 'post_file.php', true);
+        xhr.setRequestHeader('X-Request-With', 'XMLHttpRequest');
+        var oFormData = new FormData(); // 通过formdata来构建提交数据
+        oFormData.append('file', oMyFile.files[0]);
+        xhr.send(oFormData);
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <input type="file" name="" value="" id="myFile">
+  <input type="button" id="btn" value="上传">
+</body>
+
+</html>

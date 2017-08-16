@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    img {
+      width: 133px;
+      height: 200px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #000;
+      /*景深 视角*/
+      perspective: 800px;
+    }
+
+    #wrap {
+      width: 133px;
+      height: 200px;
+      position: relative;
+      margin: 250px auto 0;
+      /*设置3D环境*/
+      transform-style: preserve-3d;
+    }
+
+    #wrap img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateX()(20deg) rotateY(20deg);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="wrap">
+    <img src="images/1.jpg" alt="" draggable="false">
+    <img src="images/2.jpg" alt="" draggable="false">
+    <img src="images/3.jpg" alt="" draggable="false">
+    <img src="images/4.jpg" alt="" draggable="false">
+    <img src="images/5.jpg" alt="" draggable="false">
+    <img src="images/6.jpg" alt="" draggable="false">
+    <img src="images/7.jpg" alt="" draggable="false">
+    <img src="images/8.jpg" alt="" draggable="false">
+    <img src="images/9.jpg" alt="" draggable="false">
+    <img src="images/10.jpg" alt="" draggable="false">
+    <img src="images/11.jpg" alt="" draggable="false">
+  </div>
+  <script>
+    var wrap = document.getElementById('wrap')
+    var oImg = document.getElementsByTagName("img");
+    var len = oImg.length;
+    var Deg = 360 / len;  // 每一张图片旋转的度数
+    for (var i = 0; i < len; i++) {
+      oImg[i].style.transform = "rotateY(" + Deg * i + "deg) translatez(300px)"
+    }
+    var timer
+    var x, y, nowX, nowY, lastX, lastY, minX, minY, roX = 0, roY = 0
+    document.onmousedown = function (e) {
+      var e = e || window.event
+      lastX = e.clientX // 获取鼠标x轴的值
+      lastY = e.clientY
+      this.onmousemove = function (e) {
+        var e = e || window.event
+        nowX = e.clientX
+        nowY = e.clientY
+        minX = nowX - lastX
+        minY = nowY - lastY
+        // 需要旋转的度数
+        roY += minX * 0.1
+        roX -= minY * 0.05
+        wrap.style.transform = "rotateX(" + roX + "deg) rotateY(" + roY + "deg)"
+        // 新值变为旧值
+        lastX = nowX
+        lastY = nowY
+      }
+      this.onmouseup = function () {
+        timer = setInterval(function () {
+          minX *= 0.98
+          minY *= 0.98
+          roY += minX * 0.1
+          roX -= minY * 0.05
+          wrap.style.transform = "rotateX(" + roX + "deg) rotateY(" + roY + "deg)"
+          if (Math.abs(minX) < 0.01 && Math.abs(minY) < 0.01) {
+            clearInterval(timer)
+          }
+        }, 30)
+        this.onmousemove = null
+      }
+    }
+  </script>
+</body>
+
+</html>
